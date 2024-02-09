@@ -4,7 +4,7 @@ export default class InvalidParamsError extends Error {
   zodError: z.ZodError
 
   constructor(error: z.ZodError) {
-    super();
+    super("Invalid params");
     this.zodError = error
   }
 }

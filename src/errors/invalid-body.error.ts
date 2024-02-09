@@ -4,7 +4,7 @@ export default class InvalidBodyError extends Error {
   zodError: z.ZodError
 
   constructor(error: z.ZodError) {
-    super();
+    super("Invalid data");
     this.zodError = error
   }
 }
