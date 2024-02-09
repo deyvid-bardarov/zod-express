@@ -6,5 +6,6 @@ export default class InvalidQueryError extends Error {
   constructor(error: z.ZodError) {
     super("Invalid query params");
     this.zodError = error
+    Object.setPrototypeOf(this, InvalidQueryError.prototype)
   }
 }

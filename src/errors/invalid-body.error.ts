@@ -6,5 +6,6 @@ export default class InvalidBodyError extends Error {
   constructor(error: z.ZodError) {
     super("Invalid data");
     this.zodError = error
+    Object.setPrototypeOf(this, InvalidBodyError.prototype)
   }
 }

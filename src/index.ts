@@ -442,3 +442,5 @@ export function ValidateRequestAsync<TParams = any, TQuery = any, TBody = any>(o
     return validateRequestAsync(schemas, options);
   };
 }
+
+export { InvalidBodyError, InvalidParamsError, InvalidQueryError }

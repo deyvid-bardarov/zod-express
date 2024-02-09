@@ -6,5 +6,6 @@ export default class InvalidParamsError extends Error {
   constructor(error: z.ZodError) {
     super("Invalid params");
     this.zodError = error
+    Object.setPrototypeOf(this, InvalidParamsError.prototype)
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@fbipolice/zod-express",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Express middleware to validate requests using zod schema's.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
