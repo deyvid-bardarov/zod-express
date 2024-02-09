@@ -239,6 +239,8 @@ export function processRequestAsync<TParams = any, TQuery = any, TBody = any>(
       const parsed = await schemas.params.safeParseAsync(req.params);
       if (parsed.success) {
         req.params = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidParamsError(parsed.error)
       } else {
         errors.push({ type: "Params", errors: parsed.error });
       }
@@ -247,6 +249,8 @@ export function processRequestAsync<TParams = any, TQuery = any, TBody = any>(
       const parsed = await schemas.query.safeParseAsync(req.query);
       if (parsed.success) {
         req.query = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidQueryError(parsed.error)
       } else {
         errors.push({ type: "Query", errors: parsed.error });
       }
@@ -255,6 +259,8 @@ export function processRequestAsync<TParams = any, TQuery = any, TBody = any>(
       const parsed = await schemas.body.safeParseAsync(req.body);
       if (parsed.success) {
         req.body = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidBodyError(parsed.error)
       } else {
         errors.push({ type: "Body", errors: parsed.error });
       }
@@ -326,18 +332,30 @@ export const validateRequest: <TParams = any, TQuery = any, TBody = any>(
       if (params) {
         const parsed = params.safeParse(req.params);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidParamsError(parsed.error)
+          }
+
           errors.push({ type: "Params", errors: parsed.error });
         }
       }
       if (query) {
         const parsed = query.safeParse(req.query);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidQueryError(parsed.error)
+          }
+
           errors.push({ type: "Query", errors: parsed.error });
         }
       }
       if (body) {
         const parsed = body.safeParse(req.body);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidBodyError(parsed.error)
+          }
+
           errors.push({ type: "Body", errors: parsed.error });
         }
       }
@@ -363,18 +381,30 @@ export const validateRequestAsync: <TParams = any, TQuery = any, TBody = any>(
       if (params) {
         const parsed = await params.safeParseAsync(req.params);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidParamsError(parsed.error)
+          }
+
           errors.push({ type: "Params", errors: parsed.error });
         }
       }
       if (query) {
         const parsed = await query.safeParseAsync(req.query);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidQueryError(parsed.error)
+          }
+
           errors.push({ type: "Query", errors: parsed.error });
         }
       }
       if (body) {
         const parsed = await body.safeParseAsync(req.body);
         if (!parsed.success) {
+          if (options.throwErrors) {
+            throw new InvalidBodyError(parsed.error)
+          }
+
           errors.push({ type: "Body", errors: parsed.error });
         }
       }
@@ -399,5 +429,16 @@ export const validateRequestAsync: <TParams = any, TQuery = any, TBody = any>(
 export function ValidateRequest<TParams = any, TQuery = any, TBody = any>(options?: Options) {
   return (schemas: RequestValidation<TParams, TQuery, TBody>) => {
     return validateRequest(schemas, options);
+  };
+}
+
+/**
+ * This is constructor for validateRequestAsync. You can pass `options` to it and it will generatre an instance of `validateRequestAsync` with those options.
+ * @param options
+ * @returns
+ */
+export function ValidateRequestAsync<TParams = any, TQuery = any, TBody = any>(options?: Options) {
+  return (schemas: RequestValidation<TParams, TQuery, TBody>) => {
+    return validateRequestAsync(schemas, options);
   };
 }

@@ -7,7 +7,7 @@
   "homepage": "https://github.com/deyvid-bardarov/zod-express",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deyvid-bardarov/zod-express"
+    "url": "git+https://github.com/deyvid-bardarov/zod-express.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
