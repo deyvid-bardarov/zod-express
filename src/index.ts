@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { z, ZodEffects, ZodError, ZodSchema, ZodType, ZodTypeDef } from "zod";
+import { InvalidBodyError, InvalidParamsError, InvalidQueryError } from "./errors";
 
 type NonReadOnly<T> = { -readonly [P in keyof T]: NonReadOnly<T[P]> };
 
@@ -10,9 +11,13 @@ export function stripReadOnly<T>(readOnlyItem: T): NonReadOnly<T> {
 
 export type Options = {
   /**
-   * By setting this to true, the error will be passed to the next middleware and you can handle it in a custom way
+   * By setting this to true, the error will be passed to the next middleware, and you can handle it in a custom way
    */
   passErrorToNext?: boolean;
+  /**
+   * By setting this to true, the error will be thrown and can be handled in error handling middleware
+   */
+  throwErrors?: boolean;
   /**
    * By passing this function you can override the default error handling
    * `passErrorToNext` must not be `true` for this to work
@@ -177,6 +182,8 @@ export function processRequest<TParams = any, TQuery = any, TBody = any>(
       const parsed = schemas.params.safeParse(req.params);
       if (parsed.success) {
         req.params = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidParamsError(parsed.error)
       } else {
         errors.push({ type: "Params", errors: parsed.error });
       }
@@ -185,6 +192,8 @@ export function processRequest<TParams = any, TQuery = any, TBody = any>(
       const parsed = schemas.query.safeParse(req.query);
       if (parsed.success) {
         req.query = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidQueryError(parsed.error)
       } else {
         errors.push({ type: "Query", errors: parsed.error });
       }
@@ -193,6 +202,8 @@ export function processRequest<TParams = any, TQuery = any, TBody = any>(
       const parsed = schemas.body.safeParse(req.body);
       if (parsed.success) {
         req.body = parsed.data;
+      } else if (options.throwErrors) {
+        throw new InvalidBodyError(parsed.error)
       } else {
         errors.push({ type: "Body", errors: parsed.error });
       }

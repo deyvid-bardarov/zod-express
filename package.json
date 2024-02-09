@@ -1,13 +1,13 @@
 {
-  "name": "zod-express",
+  "name": "@fbipolice/zod-express",
   "version": "0.0.8",
   "description": "Express middleware to validate requests using zod schema's.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "homepage": "https://github.com/pshaddel/zod-express",
+  "homepage": "https://github.com/deyvid-bardarov/zod-express",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pshaddel/zod-express"
+    "url": "https://github.com/deyvid-bardarov/zod-express"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
